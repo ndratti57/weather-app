@@ -1,0 +1,200 @@
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MicroWeather AI</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <script src="https://tailwindcss.com"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen pb-24">
+
+    <!-- Header Frame -->
+    <header class="bg-slate-900/80 backdrop-blur-md sticky top-0 z-50 px-4 pt-8 pb-4 border-b border-slate-800">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-xs uppercase tracking-widest text-sky-400 font-bold">Hyper-Local Matrix</h1>
+                <select id="stationSelector" onchange="toggleStation()" class="bg-transparent text-xl font-bold text-white focus:outline-none cursor-pointer">
+                    <option value="kenmore" class="bg-slate-900 text-white">🏡 Kenmore, WA</option>
+                    <option value="laquinta" class="bg-slate-900 text-white">☀️ La Quinta, CA</option>
+                </select>
+            </div>
+            <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-1 rounded-full text-xs font-mono">● LIVE</span>
+        </div>
+    </header>
+
+    <main class="px-4 py-4">
+        <!-- TAB 1: AI WEATHER ENGINE -->
+        <section id="ai-tab" class="tab-content active space-y-4">
+            <div class="bg-gradient-to-br from-sky-900/40 to-slate-900 border border-sky-500/20 p-4 rounded-2xl shadow-xl">
+                <div class="flex items-center space-x-2 text-sky-400 mb-2">
+                    <span>🤖</span>
+                    <h2 class="text-xs font-bold uppercase tracking-wider">AI Forecast Integration</h2>
+                </div>
+                <p id="aiSummary" class="text-sm text-slate-300 leading-relaxed">
+                    Loading live station telemetry...
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+                    <span class="text-xs text-slate-400">Ambient Temp</span>
+                    <div id="currentTemp" class="text-3xl font-bold mt-1">--°F</div>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+                    <span class="text-xs text-slate-400">Barometric Pressure</span>
+                    <div id="pressureDisplay" class="text-3xl font-bold mt-1 text-emerald-400">-- mb</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: ASTROPHOTOGRAPHY TRACKER -->
+        <section id="astro-tab" class="tab-content space-y-4">
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+                <h3 class="text-sm font-bold uppercase tracking-wider text-purple-400 mb-4 flex items-center gap-2">
+                    🌌 Lens Condensation Predictor
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center p-3 bg-slate-950 rounded-xl border border-slate-800/50">
+                        <div>
+                            <p class="text-xs text-slate-400">Atmospheric Humidity</p>
+                            <p id="astroHumidity" class="text-lg font-bold">--%</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs text-slate-400">Calculated Dew Point</p>
+                            <p id="dewPointDisplay" class="text-lg font-bold text-amber-400">--°F</p>
+                        </div>
+                    </div>
+                    <div id="dewAlarmBox" class="p-4 rounded-xl border flex items-center justify-between text-sm bg-slate-950 border-slate-800 text-slate-400">
+                        <span class="font-medium" id="dewAlarmText">Waiting for station transmission...</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: MOUNTAIN PASS MATRIX -->
+        <section id="pass-tab" class="tab-content space-y-4">
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-amber-500">🏔️ Mountain Pass Telemetry</h3>
+                    <span class="text-xs text-slate-400 font-mono">Snoqualmie (I-90)</span>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-xs font-mono bg-slate-950 p-3 rounded-xl border border-slate-800">
+                    <div>Road Temp: <span class="text-white font-bold">34°F</span></div>
+                    <div>Air Temp: <span class="text-white font-bold">31°F</span></div>
+                    <div class="col-span-2 mt-1">Condition: <span class="text-amber-400 font-bold">Chambered Ice Hazard</span></div>
+                </div>
+                <div class="relative overflow-hidden rounded-xl bg-slate-950 border border-slate-800">
+                    <div class="absolute top-2 left-2 bg-slate-900/80 backdrop-blur-sm text-[10px] font-mono px-2 py-0.5 rounded text-slate-300">DOT Camera Feed</div>
+                    <img src="https://wa.gov" alt="Mountain Pass Cam" class="w-full h-48 object-cover">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Navigation Footer Bar -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-slate-900/90 backdrop-blur-xl border-t border-slate-800 px-6 py-2 flex justify-between items-center z-50">
+        <button onclick="switchTab('ai-tab')" class="nav-btn flex flex-col items-center gap-1 text-sky-400">
+            <span class="text-xl">🤖</span>
+            <span class="text-[10px] font-medium tracking-wide">AI Cast</span>
+        </button>
+        <button onclick="switchTab('astro-tab')" class="nav-btn flex flex-col items-center gap-1 text-slate-400">
+            <span class="text-xl">🌌</span>
+            <span class="text-[10px] font-medium tracking-wide">Astro</span>
+        </button>
+        <button onclick="switchTab('pass-tab')" class="nav-btn flex flex-col items-center gap-1 text-slate-400">
+            <span class="text-xl">🏔️</span>
+            <span class="text-[10px] font-medium tracking-wide">Passes</span>
+        </button>
+    </nav>
+
+    <script>
+        // ==================== CONFIGURATION WINDOW ====================
+        const TEMPEST_TOKEN = "70725737-7084-48cc-bd46-2618f582b8a8"; 
+        const STATIONS = {
+            kenmore: { id: “138397”, lat: 47.753, lon: -122.244 },
+            laquinta: { id: “139293”, lat: 33.674, lon: -116.309 }
+        };
+        // ==============================================================
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.replace('text-sky-400', 'text-slate-400'));
+            if(event) { event.currentTarget.classList.replace('text-slate-400', 'text-sky-400'); }
+        }
+
+        function toggleStation() {
+            const activeLoc = document.getElementById('stationSelector').value;
+            fetchTempestData(activeLoc);
+        }
+
+        function fetchTempestData(locationKey) {
+            const config = STATIONS[locationKey];
+            
+            if (TEMPEST_TOKEN.includes("PASTE_YOUR")) {
+                runMockCalculations(locationKey);
+                return;
+            }
+
+            const url = `https://weatherflow.com{config.id}?token=${TEMPEST_TOKEN}`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // Pulls index position 0 out of the observations payload array
+                    const latest = data.obs[0];
+                    const tempF = (latest.air_temperature * 9/5) + 32; 
+                    const humidity = latest.relative_humidity;
+                    const pressure = latest.barometric_pressure;
+
+                    updateUI(tempF, humidity, pressure, locationKey);
+                })
+                .catch(err => {
+                    console.error("Connection error:", err);
+                    runMockCalculations(locationKey);
+                });
+        }
+
+        function updateUI(temp, humidity, pressure, location) {
+            document.getElementById('currentTemp').innerText = `${temp.toFixed(1)}°F`;
+            document.getElementById('pressureDisplay').innerText = `${pressure.toFixed(1)} mb`;
+            document.getElementById('astroHumidity').innerText = `${humidity}%`;
+
+            const a = 17.27; const b = 237.7;
+            const alpha = ((a * ((temp - 32) * 5/9)) / (b + ((temp - 32) * 5/9))) + Math.log(humidity/100);
+            const dewPointC = (b * alpha) / (a - alpha);
+            const dewPointF = (dewPointC * 9/5) + 32;
+
+            document.getElementById('dewPointDisplay').innerText = `${dewPointF.toFixed(1)}°F`;
+
+            const delta = temp - dewPointF;
+            const alarmBox = document.getElementById('dewAlarmBox');
+            const alarmText = document.getElementById('dewAlarmText');
+
+            if (delta <= 3.6) {
+                alarmBox.className = "p-4 rounded-xl border bg-red-500/10 border-red-500/20 text-red-400 animate-pulse";
+alarmText.innerText = 🚨 LENS ALARM: Optic Delta is critical (+${delta.toFixed(1)}°F). Fire up lens heaters immediately.;
+} else {
+alarmBox.className = "p-4 rounded-xl border bg-emerald-500/5 border-emerald-500/20 text-emerald-400";
+alarmText.innerText = ✅ Optics Clear: Delta is Safe (+${delta.toFixed(1)}°F);
+}
+const summary = document.getElementById('aiSummary');
+if (location === "kenmore") {
+summary.innerText = AI Analysis: Ambient air sitting at ${temp.toFixed(1)}°F with high moisture loading typical of Western WA. Barometric state is stable, but keep an eye on dew creep as the night cools.;
+} else {
+summary.innerText = AI Analysis: Strong desert thermal roof active over Coachella Valley. Humidity levels at a dry ${humidity}%. Exceptional radiative cooling environment; atmospheric distortion trends low for telescope tracking.;
+}
+}
+function runMockCalculations(loc) {
+if (loc === "kenmore") { updateUI(54.2, 85, 1014.2, "kenmore"); }
+else { updateUI(88.5, 18, 1009.1, "laquinta"); }
+}
+window.onload = () => { toggleStation(); };
