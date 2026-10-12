@@ -156,3 +156,18 @@
                 alarmBox.className = "p-4 rounded-xl border bg-red-500/10 border-red-500/20 text-red-400 animate-pulse";
                 alarmText.innerText = `🚨 LENS ALARM: Optic Delta is critical (+${delta.toFixed(1)}°F). Fire up lens heaters immediately.`;
             } else {
+alarmBox.className = "p-4 rounded-xl border bg-emerald-500/5 border-emerald-500/20 text-emerald-400";
+alarmText.innerText = ✅ Optics Clear: Delta is Safe (+${delta.toFixed(1)}°F);
+}
+const summary = document.getElementById('aiSummary');
+if (location === "kenmore") {
+summary.innerText = AI Analysis: Ambient air sitting at ${temp.toFixed(1)}°F with high moisture loading typical of Western WA. Barometric state is stable, but keep an eye on dew creep as the night cools.;
+} else {
+summary.innerText = AI Analysis: Strong desert thermal roof active over Coachella Valley. Humidity levels at a dry ${humidity}%. Exceptional radiative cooling environment; atmospheric distortion trends low for telescope tracking.;
+}
+}
+function runMockCalculations(loc) {
+if (loc === "kenmore") { updateUI(54.2, 85, 1014.2, "kenmore"); }
+else { updateUI(88.5, 18, 1009.1, "laquinta"); }
+}
+window.onload = () => { toggleStation(); };
