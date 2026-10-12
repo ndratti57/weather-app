@@ -177,7 +177,6 @@
 
             // Calculation engine for real-time dew point
             const a = 17.27; const b = 237.7;
-Use code with caution.
 const alpha = ((a * ((temp - 32) * 5/9)) / (b + ((temp - 32) * 5/9))) + Math.log(humidity/100);
 const dewPointC = (b * alpha) / (a - alpha);
 const dewPointF = (dewPointC * 9/5) + 32;
